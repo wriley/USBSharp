@@ -127,8 +127,8 @@ namespace USBSharp
 		
 		[DllImport("hid.dll")]
     static public extern int HidD_GetAttributes(int HidDeviceObject, ref HIDD_ATTRIBUTES Attributes);
-		
-		[DllImport("hid.dll")]
+
+        [DllImport("hid.dll", SetLastError = true)]
     static public extern bool HidD_GetFeature(int HidDeviceObject, ref byte lpReportBuffer, int ReportBufferLength);
 		
 		[DllImport("hid.dll")]
@@ -142,8 +142,8 @@ namespace USBSharp
 		
 		[DllImport("hid.dll")]
     static public extern bool HidD_GetPreparsedData(int HidDeviceObject, ref IntPtr PreparsedData);
-		
-		[DllImport("hid.dll")]
+
+        [DllImport("hid.dll", SetLastError = true)]
     static public extern bool HidD_SetFeature(int HidDeviceObject, ref byte lpReportBuffer, int ReportBufferLength);
 		
 		[DllImport("hid.dll")]

@@ -363,8 +363,7 @@ namespace USBSharp
 			int hObject,								// IN HANDLE  HidDeviceObject,
 			ref int pPHIDP_PREPARSED_DATA);				// OUT PHIDP_PREPARSED_DATA  *PreparsedData
 
-
-		[DllImport("hid.dll", SetLastError=true)]
+        [DllImport("hid.dll", SetLastError=true)]
 		private unsafe static  extern int HidP_GetCaps(
 			int pPHIDP_PREPARSED_DATA,					// IN PHIDP_PREPARSED_DATA  PreparsedData,
 			ref HIDP_CAPS myPHIDP_CAPS);				// OUT PHIDP_CAPS  Capabilities
@@ -415,6 +414,7 @@ namespace USBSharp
         static public extern bool UnregisterDeviceNotification(
             IntPtr Handle
             );
+
 
         // API declarations relating to file I/O.
 
@@ -607,15 +607,6 @@ namespace USBSharp
         //-*************************************************************************+#*
         public unsafe int CT_CreateFile(string DeviceName)
 		{
-            /*
-            CreateFile( detailData->DevicePath,
-												GENERIC_READ | GENERIC_WRITE,
-												FILE_SHARE_READ | FILE_SHARE_WRITE,
-												NULL,
-												OPEN_EXISTING,
-												FILE_FLAG_OVERLAPPED,
-												NULL);
-		*/
             HidHandle = CreateFile(
 				DeviceName,
 				GENERIC_READ | GENERIC_WRITE,
@@ -626,13 +617,12 @@ namespace USBSharp
 				0);
 			if (HidHandle == -1)
 			{
-				return 0 - Marshal.GetLastWin32Error();
+				return 0;
 			}
 			else
 			{
 				return 1;
 			}
-
 		}
 
         //---#+************************************************************************
@@ -671,6 +661,17 @@ namespace USBSharp
 					hObject,
 					ref myHIDD_ATTRIBUTES);
 		}
+
+        public unsafe bool usbhidGetReport(int hObject, int reportNumber, ref byte[] buffer, int len)
+        {
+            buffer[0] = byte.Parse(reportNumber.ToString());
+            return HidApiDeclarations.HidD_GetFeature(hObject, ref buffer[0], len);
+        }
+
+        public unsafe bool usbhidSetReport(int hObject, ref byte[] buffer, int len)
+        {
+            return HidApiDeclarations.HidD_SetFeature(hObject, ref buffer[0], len);
+        }
 
         //---#+************************************************************************
         //---NOTATION:
@@ -819,9 +820,5 @@ namespace USBSharp
             {
             }
         }
-
-      
-		
-
 	}
 }
